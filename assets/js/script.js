@@ -38,8 +38,9 @@ var loadSearchHistory = function() {
 }
 
 var getSearchedInfo = function(city) {
-    var apiUrl = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=imperial&appid=" + apiKey;
-    fetch(apiUrl).then(function(response) {
+    var currentWeather = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=imperial&appid=" + apiKey;
+    var fiveDayWeather = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + "&units=imperial&appid=" + apiKey;
+    fetch(currentWeather).then(function(response) {
         if (response.ok) {
             response.json().then(function(data) {
                 console.log(data);
@@ -56,6 +57,19 @@ var getSearchedInfo = function(city) {
     }).catch(function(error) {
         alert("Unable to connect to weather service");
     });
+    
+    fetch(fiveDayWeather).then(function(response) {
+        if (response.ok) {
+            response.json().then(function(data) {
+                console.log(data);
+                //every 8th item is 24hrs, starting item 4
+                const dayOne = data.list[4]
+                const dayTwo = data.list[12]
+                const dayThree = data.list[20]
+                fiveDayFore(dayOne, dayTwo, dayThree)
+            })
+        } 
+    });
 }   
 
 var displayWeather = function(temp, city, speed, humidity) {
@@ -70,6 +84,10 @@ var displayWeather = function(temp, city, speed, humidity) {
     weatherSearchWind.textContent = speed + " MPH";
     weatherSearchHumid.textContent = humidity + "%";
     weatherSearchUV.textContent = "";
+}
+
+var fiveDayFore = function(dayOne, dayTwo, dayThree) {
+    console.log(dayOne, dayTwo, dayThree);
 }
 
 searchButtonEl.addEventListener("click", submitHandler);
