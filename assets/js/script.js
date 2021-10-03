@@ -14,7 +14,7 @@ let historyObj = { hist: [] };
 
 var submitHandler = function(event) {
     event.preventDefault();
-    var city = searchInputEl.value.trim();
+    var city = searchInputEl.value.toLowerCase().trim();
     if (city) {
         getSearchedInfo(city);
         saveSearch(city);
@@ -57,12 +57,15 @@ var getSearchedInfo = function(city) {
     fetch(currentWeather).then(function(response) {
         if (response.ok) {
             response.json().then(function(data) {
+                console.log(data)
                 const {temp} = data.main
                 const city = data.name
                 const {speed} = data.wind
                 const {humidity} = data.main
                 const {icon} = data.weather[0]
-
+                const {lat} = data.coord
+                const {lon} = data.coord
+                getUvData(lat, lon);
                 displayWeather(temp, city, speed, humidity, icon)
             });
         } else {
@@ -88,7 +91,6 @@ var getSearchedInfo = function(city) {
 }   
 
 var displayWeather = function(temp, city, speed, humidity, icon) {
-    console.log(icon)
     weatherSearchCityEl.textContent = "";
     weatherSearchTempEl.textContent = "";
     weatherSearchWindEl.textContent = "";
@@ -102,9 +104,23 @@ var displayWeather = function(temp, city, speed, humidity, icon) {
     weatherSearchIconEl.innerHTML = `<img src="./assets/icons/${icon}.png">`
     // weatherSearchUVEl.textContent = "";
 }
+var getUvData = function(lat, lon) {
+    //FETCH ONECALLAPI
+    var oneCallUrl = "https://api.openweathermap.org/data/2.5/onecall?lat=" + lat + "&lon=" + lon + "&exclude=hourly,daily&appid=" + apiKey;
+    fetch(oneCallUrl).then(function(response) {
+        if (response.ok) {
+            response.json().then(function(data) {
+                displayUvi(data);
+            })
+        }
+    })
+}
+var displayUvi = function(data) {
+    console.log(data)
+}
+
 
 var fiveDayFore = function(dayOne, dayTwo, dayThree, dayFour, dayFive) {
-    console.log(dayOne, dayTwo, dayThree);
     var dayCardsEl = document.querySelector("#dayCards")
     dayCardsEl.classList.remove("visually-hidden")
     //trigger five day forecast renders
@@ -199,5 +215,6 @@ var dayFiveCard = function(dayFive) {
     dayFiveSpeedEl.textContent = "Wind Speed: " + speed + " MPH";
     dayFiveHumidEl.textContent = "Humidity: " + humidity + "%"
 }
+
 loadSearchHistory ();
 searchButtonEl.addEventListener("click", submitHandler);
