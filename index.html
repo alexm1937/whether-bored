@@ -37,7 +37,7 @@
     </div>
 
     <!-- CurrentCity Info -->
-    <div class="col-7 d-flex flex-column max-vh-40">
+    <div class="col-7 d-flex flex-column max-vh-40 visually-hidden" id="dayCards">
         <h4>Showing Weather for: <span id="weather-search-city"></span></h4>
         <h6>Temp: <span id="weather-search-temp"></span></h6>
         <h6>Wind: <span id="weather-search-wind"></span></h6>
@@ -46,37 +46,62 @@
 
         <!-- FIVE DAY FORECAST  -->
         <div class="row">
-            <!-- Day One + Two  -->
-            <div class="col-6 card visually-hidden" id="dayOneCard">
+            <!--  dayCards -->
+            <div class="col-12 col-md-6 card">
                 <div class="card-body">
-                    <h4 class="card-title">Test</h4>
-                    <ul id="day-1-fore" class="list-group list-group-flush">
+                    <h4 class="card-title" id="dayOneTitle"></h4>
+                    <ul class="list-group list-group-flush">
                         <li class="list-group-item" id="dayOneTemp">test</li>
                         <li class="list-group-item" id="dayOneSpeed"></li>
                         <li class="list-group-item" id="dayOneHumid"></li>
                     </ul>
                 </div>
             </div>
-            <div class="col-6 card">
-                <div class="card-body" id="dayTwoCard">
-                    <h4 class="card-title">Test</h4>
-                    <ul id="day-1-fore" class="list-group list-group-flush">
+            <div class="col-12 col-md-6 card">
+                <div class="card-body" >
+                    <h4 class="card-title" id="dayTwoTitle"></h4>
+                    <ul class="list-group list-group-flush">
                         <li class="list-group-item" id="dayTwoTemp">test</li>
                         <li class="list-group-item" id="dayTwoSpeed"></li>
                         <li class="list-group-item" id="dayTwoHumid"></li>
                     </ul>
                 </div>
             </div>
-
-
-
-
-
+            <div class="col-12 col-md-6 card">
+                <div class="card-body" >
+                    <h4 class="card-title" id="dayThreeTitle"></h4>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item" id="dayThreeTemp">test</li>
+                        <li class="list-group-item" id="dayThreeSpeed"></li>
+                        <li class="list-group-item" id="dayThreeHumid"></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 card">
+                <div class="card-body" >
+                    <h4 class="card-title" id="dayFourTitle"></h4>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item" id="dayFourTemp">test</li>
+                        <li class="list-group-item" id="dayFourSpeed"></li>
+                        <li class="list-group-item" id="dayFourHumid"></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 card">
+                <div class="card-body" >
+                    <h4 class="card-title" id="dayFiveTitle"></h4>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item" id="dayFiveTemp">test</li>
+                        <li class="list-group-item" id="dayFiveSpeed"></li>
+                        <li class="list-group-item" id="dayFiveHumid"></li>
+                    </ul>
+                </div>
+            </div>
         </div>
-
     </div>
-
  </div>
+
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="./assets/js/script.js"></script>
 </body>

@@ -1,4 +1,5 @@
 const apiKey = "724473c03ae546dd2cb1c166f124b69d";
+var currentDate = moment().format('MM/DD/YYYY');
 var searchInputEl = document.querySelector("#search");
 var searchButtonEl = document.querySelector("#searchBtn")
 // var weatherContainerEl = document.querySelector("#weather-container");    
@@ -27,17 +28,17 @@ var saveSearch = function(city) {
     historyArr.push(city); 
     localStorage.setItem("history", JSON.stringify(historyArr));
 }
-var loadSearchHistory = function() {
+// var loadSearchHistory = function() {
     // if (localStorage.getItem("history") === null) {
     //     let history = ["chicago"];
     //     return history;
     // } else {
-    JSON.parse(localStorage.getItem("history"))
-    for (var i = 0; i < history.length; i++) {
-        var name = history[i]
-        historyArr.push(name);
-    }
-}
+//     JSON.parse(localStorage.getItem("history"))
+//     for (var i = 0; i < history.length; i++) {
+//         var name = history[i]
+//         historyArr.push(name);
+//     }
+// }
 
 var getSearchedInfo = function(city) {
     var currentWeather = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=imperial&appid=" + apiKey;
@@ -45,7 +46,6 @@ var getSearchedInfo = function(city) {
     fetch(currentWeather).then(function(response) {
         if (response.ok) {
             response.json().then(function(data) {
-                console.log(data);
                 const {temp} = data.main
                 const city = data.name
                 const {speed} = data.wind
@@ -63,18 +63,21 @@ var getSearchedInfo = function(city) {
     fetch(fiveDayWeather).then(function(response) {
         if (response.ok) {
             response.json().then(function(data) {
-                console.log(data);
                 //every 8th item is 24hrs, starting item 4
                 const dayOne = data.list[4]
                 const dayTwo = data.list[12]
                 const dayThree = data.list[20]
-                fiveDayFore(dayOne, dayTwo, dayThree)
+                const dayFour = data.list[28]
+                const dayFive = data.list[36]
+                fiveDayFore(dayOne, dayTwo, dayThree, dayFour, dayFive);
             })
         } 
     });
 }   
 
 var displayWeather = function(temp, city, speed, humidity) {
+
+    console.log(currentDate)
     weatherSearchCityEl.textContent = "";
     weatherSearchTempEl.textContent = "";
     weatherSearchWindEl.textContent = "";
@@ -82,26 +85,26 @@ var displayWeather = function(temp, city, speed, humidity) {
     // weatherSearchUVEl.textContent = "";
 
     weatherSearchTempEl.textContent = temp + " Degrees, Farenheight";
-    weatherSearchCityEl.textContent = city;
+    weatherSearchCityEl.textContent = city + " " + currentDate;
     weatherSearchWindEl.textContent = speed + " MPH";
     weatherSearchHumidEl.textContent = humidity + "%";
     // weatherSearchUVEl.textContent = "";
 }
 
-var fiveDayFore = function(dayOne, dayTwo, dayThree) {
+var fiveDayFore = function(dayOne, dayTwo, dayThree, dayFour, dayFive) {
     console.log(dayOne, dayTwo, dayThree);
-    var dayOneCardEl = document.querySelector("#dayOneCard");
-    dayOneCardEl.classList.remove("visually-hidden")
-    
-    //DayOneForecast
+    var dayCardsEl = document.querySelector("#dayCards")
+    dayCardsEl.classList.remove("visually-hidden")
+    //trigger five day forecast renders
     dayOneCard(dayOne);
     dayTwoCard(dayTwo);
-    
-    
-    //append f
+    dayThreeCard(dayThree);
+    dayFourCard(dayFour);
+    dayFiveCard(dayFive);
 }
 var dayOneCard = function(dayOne) {
-    var dayOneCardEl = document.querySelector("#dayOneCard");
+    var dateOne = moment(currentDate, 'MM/DD/YYYY').add(1, "d").format('MM/DD/YYYY');
+    var dayOneTitleEl = document.querySelector("#dayOneTitle");    
     var dayOneTempEl = document.querySelector("#dayOneTemp");
     var dayOneSpeedEl = document.querySelector("#dayOneSpeed");
     var dayOneHumidEl = document.querySelector("#dayOneHumid");
@@ -109,12 +112,14 @@ var dayOneCard = function(dayOne) {
     const {speed} = dayOne.wind;
     const {humidity} = dayOne.main;
 
+    dayOneTitleEl.textContent = dateOne;
     dayOneTempEl.textContent = "Temp: " + temp + " Degrees F";
     dayOneSpeedEl.textContent = "Wind Speed: " + speed + " MPH";
     dayOneHumidEl.textContent = "Humidity: " + humidity + "%";
 }
 var dayTwoCard = function(dayTwo) {
-    var dayTwoCardEl = document.querySelector("#dayTwoCard");
+    var dateTwo = moment(currentDate, 'MM/DD/YYYY').add(2, "d").format('MM/DD/YYYY');
+    var dayTwoTitleEl = document.querySelector("#dayTwoTitle");
     var dayTwoTempEl = document.querySelector("#dayTwoTemp");
     var dayTwoSpeedEl = document.querySelector("#dayTwoSpeed");
     var dayTwoHumidEl = document.querySelector("#dayTwoHumid");
@@ -122,57 +127,55 @@ var dayTwoCard = function(dayTwo) {
     const {speed} = dayTwo.wind;
     const {humidity} = dayTwo.main;
 
+    dayTwoTitleEl.textContent = dateTwo;
     dayTwoTempEl.textContent = "Temp: " + temp + " Degrees F";
     dayTwoSpeedEl.textContent = "Wind Speed: " + speed + " MPH";
     dayTwoHumidEl.textContent = "Humidity: " + humidity + "%"
 }
+var dayThreeCard = function(dayThree) {
+    var dateThree = moment(currentDate, 'MM/DD/YYYY').add(3, "d").format('MM/DD/YYYY');
+    var dayThreeTitleEl = document.querySelector("#dayThreeTitle");
+    var dayThreeTempEl = document.querySelector("#dayThreeTemp");
+    var dayThreeSpeedEl = document.querySelector("#dayThreeSpeed");
+    var dayThreeHumidEl = document.querySelector("#dayThreeHumid");
+    const {temp} = dayThree.main;
+    const {speed} = dayThree.wind;
+    const {humidity} = dayThree.main;
 
+    dayThreeTitleEl.textContent = dateThree;
+    dayThreeTempEl.textContent = "Temp: " + temp + " Degrees F";
+    dayThreeSpeedEl.textContent = "Wind Speed: " + speed + " MPH";
+    dayThreeHumidEl.textContent = "Humidity: " + humidity + "%"
+}
+var dayFourCard = function(dayFour) {
+    var dateFour = moment(currentDate, 'MM/DD/YYYY').add(4, "d").format('MM/DD/YYYY');
+    var dayFourTitleEl = document.querySelector("#dayFourTitle");
+    var dayFourTempEl = document.querySelector("#dayFourTemp");
+    var dayFourSpeedEl = document.querySelector("#dayFourSpeed");
+    var dayFourHumidEl = document.querySelector("#dayFourHumid");
+    const {temp} = dayFour.main;
+    const {speed} = dayFour.wind;
+    const {humidity} = dayFour.main;
+
+        dayFourTitleEl.textContent = dateFour;
+    dayFourTempEl.textContent = "Temp: " + temp + " Degrees F";
+    dayFourSpeedEl.textContent = "Wind Speed: " + speed + " MPH";
+    dayFourHumidEl.textContent = "Humidity: " + humidity + "%"
+}
+var dayFiveCard = function(dayFive) {
+    var dateFive = moment(currentDate, 'MM/DD/YYYY').add(5, "d").format('MM/DD/YYYY');
+    var dayFiveTitleEl = document.querySelector("#dayFiveTitle");
+    var dayFiveTempEl = document.querySelector("#dayFiveTemp");
+    var dayFiveSpeedEl = document.querySelector("#dayFiveSpeed");
+    var dayFiveHumidEl = document.querySelector("#dayFiveHumid");
+    const {temp} = dayFive.main;
+    const {speed} = dayFive.wind;
+    const {humidity} = dayFive.main;
+
+    dayFiveTitleEl.textContent = dateFive;
+    dayFiveTempEl.textContent = "Temp: " + temp + " Degrees F";
+    dayFiveSpeedEl.textContent = "Wind Speed: " + speed + " MPH";
+    dayFiveHumidEl.textContent = "Humidity: " + humidity + "%"
+}
 
 searchButtonEl.addEventListener("click", submitHandler);
-
-loadSearchHistory();
-
-// {
-//     "coord": {
-//         "lon": -97.7431,
-//         "lat": 30.2672
-//     },
-//     "weather": [
-//         {
-//             "id": 804,
-//             "main": "Clouds",
-//             "description": "overcast clouds",
-//             "icon": "04d"
-//         }
-//     ],
-//     "base": "stations",
-//     "main": {
-//         "temp": 301.78,
-//         "feels_like": 305.09,
-//         "temp_min": 299.88,
-//         "temp_max": 304.32,
-//         "pressure": 1015,
-//         "humidity": 70
-//     },
-//     "visibility": 10000,
-//     "wind": {
-//         "speed": 0.45,
-//         "deg": 23,
-//         "gust": 2.24
-//     },
-//     "clouds": {
-//         "all": 90
-//     },
-//     "dt": 1633202125,
-//     "sys": {
-//         "type": 2,
-//         "id": 2003218,
-//         "country": "US",
-//         "sunrise": 1633177502,
-//         "sunset": 1633220111
-//     },
-//     "timezone": -18000,
-//     "id": 4671654,
-//     "name": "Austin",
-//     "cod": 200
-// }
