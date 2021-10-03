@@ -4,9 +4,11 @@ var searchButtonEl = document.querySelector("#searchBtn")
 // var weatherContainerEl = document.querySelector("#weather-container");    
 var weatherSearchCityEl = document.querySelector("#weather-search-city");
 var weatherSearchTempEl = document.querySelector("#weather-search-temp");
-var weatherSearchWind = document.querySelector("#weather-search-wind");
-var weatherSearchHumid = document.querySelector("#weather-search-humid");
-var weatherSearchUV = document.querySelector("#weather-search-uv");
+var weatherSearchWindEl = document.querySelector("#weather-search-wind");
+var weatherSearchHumidEl = document.querySelector("#weather-search-humid");
+var weatherSearchUVEl = document.querySelector("#weather-search-uv");
+var dayOneCardEl = document.querySelector("#dayOneCard");
+
 let historyArr = [];
 
 var submitHandler = function(event) {
@@ -57,7 +59,7 @@ var getSearchedInfo = function(city) {
     }).catch(function(error) {
         alert("Unable to connect to weather service");
     });
-    
+    //FIVE DAY FORECAST API FETCH
     fetch(fiveDayWeather).then(function(response) {
         if (response.ok) {
             response.json().then(function(data) {
@@ -75,20 +77,56 @@ var getSearchedInfo = function(city) {
 var displayWeather = function(temp, city, speed, humidity) {
     weatherSearchCityEl.textContent = "";
     weatherSearchTempEl.textContent = "";
-    weatherSearchWind.textContent = "";
-    weatherSearchHumid.textContent = "";
-    weatherSearchUV.textContent = "";
+    weatherSearchWindEl.textContent = "";
+    weatherSearchHumidEl.textContent = "";
+    // weatherSearchUVEl.textContent = "";
 
     weatherSearchTempEl.textContent = temp + " Degrees, Farenheight";
     weatherSearchCityEl.textContent = city;
-    weatherSearchWind.textContent = speed + " MPH";
-    weatherSearchHumid.textContent = humidity + "%";
-    weatherSearchUV.textContent = "";
+    weatherSearchWindEl.textContent = speed + " MPH";
+    weatherSearchHumidEl.textContent = humidity + "%";
+    // weatherSearchUVEl.textContent = "";
 }
 
 var fiveDayFore = function(dayOne, dayTwo, dayThree) {
     console.log(dayOne, dayTwo, dayThree);
+    var dayOneCardEl = document.querySelector("#dayOneCard");
+    dayOneCardEl.classList.remove("visually-hidden")
+    
+    //DayOneForecast
+    dayOneCard(dayOne);
+    dayTwoCard(dayTwo);
+    
+    
+    //append f
 }
+var dayOneCard = function(dayOne) {
+    var dayOneCardEl = document.querySelector("#dayOneCard");
+    var dayOneTempEl = document.querySelector("#dayOneTemp");
+    var dayOneSpeedEl = document.querySelector("#dayOneSpeed");
+    var dayOneHumidEl = document.querySelector("#dayOneHumid");
+    const {temp} = dayOne.main;
+    const {speed} = dayOne.wind;
+    const {humidity} = dayOne.main;
+
+    dayOneTempEl.textContent = "Temp: " + temp + " Degrees F";
+    dayOneSpeedEl.textContent = "Wind Speed: " + speed + " MPH";
+    dayOneHumidEl.textContent = "Humidity: " + humidity + "%";
+}
+var dayTwoCard = function(dayTwo) {
+    var dayTwoCardEl = document.querySelector("#dayTwoCard");
+    var dayTwoTempEl = document.querySelector("#dayTwoTemp");
+    var dayTwoSpeedEl = document.querySelector("#dayTwoSpeed");
+    var dayTwoHumidEl = document.querySelector("#dayTwoHumid");
+    const {temp} = dayTwo.main;
+    const {speed} = dayTwo.wind;
+    const {humidity} = dayTwo.main;
+
+    dayTwoTempEl.textContent = "Temp: " + temp + " Degrees F";
+    dayTwoSpeedEl.textContent = "Wind Speed: " + speed + " MPH";
+    dayTwoHumidEl.textContent = "Humidity: " + humidity + "%"
+}
+
 
 searchButtonEl.addEventListener("click", submitHandler);
 
