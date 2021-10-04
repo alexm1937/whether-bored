@@ -9,8 +9,6 @@
     <title>WhetherBored! Check the WeatherBoard!</title>
 </head>
 
-
-
 <body>
     <div class="row no-gutters">
         <header class="col-12 bg-primary text-light d-flex flex-column">
@@ -20,7 +18,7 @@
 
  <div class="container row p-0">
     <!-- SIDE BAR MENU -->
-    <div class="row min-vh-100 no-gutters col-5 ms-0">
+    <div class="row min-vh-100 no-gutters col-5 col-md-3 ms-0">
         <header class="col-12 bg-light text-dark sticky-top d-flex flex-column p-4" id="buttonsDiv">
             <h4 class="text-center">
                 Search for a City:
@@ -37,12 +35,12 @@
     </div>
 
     <!-- CurrentCity Info -->
-    <div class="col-7 d-flex flex-column max-vh-40 visually-hidden" id="dayCards">
+    <div class="col-7 col-md-9 d-flex flex-column max-vh-40 visually-hidden" id="dayCards">
         <h4>Showing Weather for: <span id="weather-search-city"></span><div class="weather-icon"><img src="./assets/icons/unknown.png" /></div></h4>
         <h6>Temp: <span id="weather-search-temp"></span></h6>
         <h6>Wind: <span id="weather-search-wind"></span></h6>
         <h6>Humidity: <span id="weather-search-humid"></span></h6>
-        <h6>UV Index: <span id="weather-search-uv"></span></h6>
+        <h6>UV Index: <button type="button" id="weather-search-uv"></button></h6>
 
         <!-- FIVE DAY FORECAST  -->
         <div class="row">

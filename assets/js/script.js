@@ -117,6 +117,18 @@ var getUvData = function(lat, lon) {
 }
 var displayUvi = function(data) {
     console.log(data)
+    var uviEl = document.querySelector("#weather-search-uv")
+    var {uvi} = data.current
+        if (uvi <= 4) {
+        uviEl.classList.add("bg-success","text-light");
+        } 
+        if (uvi > 4 && uvi <=8) {
+        uviEl.classList.add("bg-warning")
+        }
+        if (uvi > 8) {
+        uviEl.classList.add("bg-danger")
+        }
+    uviEl.textContent = uvi;
 }
 
 
