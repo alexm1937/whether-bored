@@ -10,7 +10,10 @@ var weatherSearchHumidEl = document.querySelector("#weather-search-humid");
 var weatherSearchIconEl = document.querySelector(".weather-icon");
 var weatherSearchUVEl = document.querySelector("#weather-search-uv");
 var dayOneCardEl = document.querySelector("#dayOneCard");
+var cityBtnEl = document.querySelectorAll(".btn");
+var histButt
 let historyObj = { hist: [] };
+
 
 var submitHandler = function(event) {
     event.preventDefault();
@@ -27,6 +30,7 @@ var submitHandler = function(event) {
 var saveSearch = function(city) {
     historyObj.hist.push(city); 
     localStorage.setItem("history", JSON.stringify(historyObj));
+    
 }
 
 var loadSearchHistory = function() {
@@ -42,13 +46,15 @@ var createHistoryButtons = function() {
         var butt = document.createElement("button");
         butt.innerHTML = historyObj.hist[i];
         butt.id = historyObj.hist[i]
-        butt.classList.add("btn", "btn-secondary", "mt-2")
+        butt.classList.add("btn", "btn-secondary", "mt-2", "cityBtn")
+        butt.setAttribute("onclick", "getButtId(this)");
+        var city;
         buttonsEl.appendChild(butt);
-        butt.onclick = function() {
-            var city = butt.id
-            getSearchedInfo(city);
-        }
     }
+}
+var getButtId = function(butt) {
+    var city = butt.id
+    getSearchedInfo(city)
 }
 
 var getSearchedInfo = function(city) {
@@ -230,3 +236,4 @@ var dayFiveCard = function(dayFive) {
 
 loadSearchHistory ();
 searchButtonEl.addEventListener("click", submitHandler);
+// cityBtnEl.addEventListener("click", getSearchedInfo(cityBtnEl.id));
