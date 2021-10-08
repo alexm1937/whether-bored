@@ -28,8 +28,11 @@ var submitHandler = function(event) {
 };
 
 var saveSearch = function(city) {
+    //Check for item before pushing to array?
+    if (historyObj.hist.includes(city) === false) {
     historyObj.hist.push(city); 
     localStorage.setItem("history", JSON.stringify(historyObj));
+    } else return;
     
 }
 
