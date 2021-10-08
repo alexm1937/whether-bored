@@ -1,6 +1,7 @@
 const apiKey = "724473c03ae546dd2cb1c166f124b69d";
 var currentDate = moment().format('MM/DD/YYYY');
 var searchInputEl = document.querySelector("#search");
+var stateSelectEl = document.querySelector("#states");
 var searchButtonEl = document.querySelector("#searchBtn")
 // var weatherContainerEl = document.querySelector("#weather-container");    
 var weatherSearchCityEl = document.querySelector("#weather-search-city");
@@ -17,19 +18,23 @@ let historyObj = { hist: [] };
 
 var submitHandler = function(event) {
     event.preventDefault();
-    var city = searchInputEl.value.toLowerCase().trim();
-    if (city) {
-        getSearchedInfo(city);
-        saveSearch(city);
+    var city = searchInputEl.value.toLowerCase().trim() + ","
+    var state = stateSelectEl.value.toUpperCase().trim();
+    if (city, state) {
+        getSearchedInfo(city, state);
+        saveSearch(city, state);
         searchInputEl.value = "";
     } else {
-        alert("Please Enter a City");
+        alert("Please Enter a City and State");
     }
 };
 
-var saveSearch = function(city) {
+var saveSearch = function(city, state) {
+    //Check for item before pushing to array?
+    if (historyObj.hist.includes(city) === false) {
     historyObj.hist.push(city); 
     localStorage.setItem("history", JSON.stringify(historyObj));
+    } else return;
     
 }
 
@@ -52,13 +57,14 @@ var createHistoryButtons = function() {
         buttonsEl.appendChild(butt);
     }
 }
+
 var getButtId = function(butt) {
     var city = butt.id
     getSearchedInfo(city)
 }
 
-var getSearchedInfo = function(city) {
-    var currentWeather = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=imperial&appid=" + apiKey;
+var getSearchedInfo = function(city, state) {
+    var currentWeather = "https://api.openweathermap.org/data/2.5/weather?q=" + city + state + "&units=imperial&appid=" + apiKey;
     var fiveDayWeather = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + "&units=imperial&appid=" + apiKey;
     fetch(currentWeather).then(function(response) {
         if (response.ok) {
@@ -136,7 +142,6 @@ var displayUvi = function(data) {
         }
     uviEl.textContent = uvi;
 }
-
 
 var fiveDayFore = function(dayOne, dayTwo, dayThree, dayFour, dayFive) {
     var dayCardsEl = document.querySelector("#dayCards")
