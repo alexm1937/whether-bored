@@ -55,6 +55,7 @@ var createHistoryButtons = function() {
         buttonsEl.appendChild(butt);
     }
 }
+
 var getButtId = function(butt) {
     var city = butt.id
     getSearchedInfo(city)
