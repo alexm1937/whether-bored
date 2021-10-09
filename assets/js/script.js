@@ -2,7 +2,6 @@ const apiKey = "724473c03ae546dd2cb1c166f124b69d";
 var currentDate = moment().format('MM/DD/YYYY');
 var searchInputEl = document.querySelector("#search");
 var searchButtonEl = document.querySelector("#searchBtn")
-// var weatherContainerEl = document.querySelector("#weather-container");    
 var weatherSearchCityEl = document.querySelector("#weather-search-city");
 var weatherSearchTempEl = document.querySelector("#weather-search-temp");
 var weatherSearchWindEl = document.querySelector("#weather-search-wind");
@@ -14,19 +13,32 @@ var cityBtnEl = document.querySelectorAll(".btn");
 var histButt
 let historyObj = { hist: [] };
 
-
+//function for search button
 var submitHandler = function(event) {
     event.preventDefault();
     var city = searchInputEl.value.toLowerCase().trim();
     if (city) {
-        getSearchedInfo(city);
         saveSearch(city);
+        getSearchedInfo(city);
+        tempButton(city);
         searchInputEl.value = "";
     } else {
         alert("Please Enter a City");
     }
 };
 
+//create temp button to display searches before refresh
+var tempButton = function (city) {
+    var buttonsEl = document.querySelector("#buttonsDiv")
+    var butt = document.createElement("button");
+    butt.innerHTML = city
+    butt.id = city
+    butt.classList.add("btn", "btn-secondary", "mt-2", "cityBtn")
+        butt.setAttribute("onclick", "getButtId(this)");
+        var city;
+        buttonsEl.appendChild(butt);
+}
+//save to localstorage if item does not already exist in localstorage
 var saveSearch = function(city) {
     //Check for item before pushing to array?
     if (historyObj.hist.includes(city) === false) {
@@ -35,14 +47,14 @@ var saveSearch = function(city) {
     } else return;
     
 }
-
+//loads buttons on page load
 var loadSearchHistory = function() {
     if (localStorage.getItem('history')) {
         historyObj = JSON.parse(localStorage.getItem('history'));
         createHistoryButtons();
     }
 }
-
+//creates buttons loaded from localstorage
 var createHistoryButtons = function() {
     var buttonsEl = document.querySelector("#buttonsDiv")
     for (var i = 0; i < historyObj.hist.length; i++) {
@@ -55,12 +67,12 @@ var createHistoryButtons = function() {
         buttonsEl.appendChild(butt);
     }
 }
-
+//loads city selected from previous search buttons
 var getButtId = function(butt) {
     var city = butt.id
     getSearchedInfo(city)
 }
-
+//fetch functions current + five day
 var getSearchedInfo = function(city) {
     var currentWeather = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=imperial&appid=" + apiKey;
     var fiveDayWeather = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + "&units=imperial&appid=" + apiKey;
@@ -99,6 +111,18 @@ var getSearchedInfo = function(city) {
         } 
     });
 }   
+//fetch uv data
+var getUvData = function(lat, lon) {
+    //FETCH ONECALLAPI
+    var oneCallUrl = "https://api.openweathermap.org/data/2.5/onecall?lat=" + lat + "&lon=" + lon + "&exclude=hourly,daily&appid=" + apiKey;
+    fetch(oneCallUrl).then(function(response) {
+        if (response.ok) {
+            response.json().then(function(data) {
+                displayUvi(data);
+            })
+        }
+    })
+}
 
 var displayWeather = function(temp, city, speed, humidity, icon) {
     weatherSearchCityEl.textContent = "";
@@ -114,17 +138,7 @@ var displayWeather = function(temp, city, speed, humidity, icon) {
     weatherSearchIconEl.innerHTML = `<img src="./assets/icons/${icon}.png">`
     // weatherSearchUVEl.textContent = "";
 }
-var getUvData = function(lat, lon) {
-    //FETCH ONECALLAPI
-    var oneCallUrl = "https://api.openweathermap.org/data/2.5/onecall?lat=" + lat + "&lon=" + lon + "&exclude=hourly,daily&appid=" + apiKey;
-    fetch(oneCallUrl).then(function(response) {
-        if (response.ok) {
-            response.json().then(function(data) {
-                displayUvi(data);
-            })
-        }
-    })
-}
+
 var displayUvi = function(data) {
     console.log(data)
     var uviEl = document.querySelector("#weather-search-uv")
@@ -140,7 +154,6 @@ var displayUvi = function(data) {
         }
     uviEl.textContent = uvi;
 }
-
 
 var fiveDayFore = function(dayOne, dayTwo, dayThree, dayFour, dayFive) {
     var dayCardsEl = document.querySelector("#dayCards")
@@ -240,4 +253,3 @@ var dayFiveCard = function(dayFive) {
 
 loadSearchHistory ();
 searchButtonEl.addEventListener("click", submitHandler);
-// cityBtnEl.addEventListener("click", getSearchedInfo(cityBtnEl.id));
